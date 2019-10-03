@@ -27,10 +27,12 @@ class Server(object):
 
         while True:
 
+            print("Waiting")
             (client_socket, address) = server_socket.accept()
 
             t = threading.Thread(target=Handler, args=[client_socket, address])
             t.start()
+            t.join()
 
 if __name__ == "__main__":
     
