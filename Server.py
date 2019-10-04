@@ -27,7 +27,6 @@ class Server(object):
 
         while True:
 
-            print("Waiting")
             (client_socket, address) = server_socket.accept()
 
             t = threading.Thread(target=Handler, args=[client_socket, address])

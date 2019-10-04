@@ -25,7 +25,7 @@ class Handler(object):
         # method = split_data[0]
         request = split_data[1]
         element = os.path.split(request)[0]
-        r_type = self.check_resource_type(element)
+        r_type = self.check_resource_type(element, request)
 
         if r_type == "page":
 
@@ -34,23 +34,22 @@ class Handler(object):
         elif r_type == "resource":
 
             content_type = self.get_content_type(request)
-            print(content_type)
             self.send_resource(request, content_type)
 
         elif r_type == "error":
 
             self.send_page(error=True)
 
-    def check_resource_type(self, req):
+    def check_resource_type(self, element, request):
 
-        if req in RESOURCES:
-            r_type = "resource"
+        if element in RESOURCES:
+            return "resource"
 
-        elif req in PAGE_MAP:
-            r_type = "page"
+        elif element in PAGE_MAP:
+            return "page"
         
         else:
-            r_type = "error"
+            return "error"
 
         return r_type
     
@@ -59,7 +58,7 @@ class Handler(object):
         type_ = TYPES[os.path.split(request)[0]]
         ext = os.path.splitext(request)[1]
 
-        if ext == ".png":
+        if ext == ".png" or ext == ".ico":
 
             return f"{type_}/png"
 
@@ -132,51 +131,3 @@ class Handler(object):
 
         for b in data.split("\n"):
             print(b)
-
-    # def get_locator(self, data):
-
-    #     headers = data.decode("utf-8").split()
-    #     path = headers[1]
-
-    #     return path
-
-    # def get_resource(self, resource):
-
-    #     try: 
-
-    #         response = b"HTTP/1.1 200 OK\r\n"
-    #         split_res = resource.split("/")
-
-    #         if len(split_res) > 2:
-    #             res_type = split_res [1]
-    #             base_path = RESOURCES[res_type]
-    #             to_send = os.path.join(base_path, split_res[2])
-
-    #         else:
-    #             base_path = "pages"
-    #             to_send = os.path.join(base_path, PAGE_MAP[resource])
-
-    #     except KeyError:
-
-    #         response = b"HTTP/1.1 404 Not Found\r\n"
-    #         to_send = "error.html"
-
-    #     with open(to_send, "rb") as f:
-            
-    #         data = f.read()
-
-    #     headers = self.build_headers(response, len(data))
-
-    #     return headers + data
-
-    # def build_headers(self, response, data):
-
-    #     length = bytes(f"Content-Length: {data}\r\n", "utf-8")
-    #     conn = b"Connection: close\n\n"
-
-    #     return response + length + conn
-
-    # def send_resource(self, resource):
-
-    #     self.socket.sendall(resource)
-    #     return

@@ -1,15 +1,9 @@
-color = "blue"
-
-while(true) {
-    setTimeout(function(){
-        heading = document.getElementsByTagName("h1");
-        heading.style.color = color
-        if (color == "blue"){
-            color = "red"
-        }
-        else{
-            color = "blue"
-        }
-    }, 1000)
-    
-}
+setInterval(function (){
+    h = document.getElementById("heading");
+    if (h.style.color == "red"){
+        h.style.color = "blue";
+    }
+    else{
+        h.style.color = "red"
+    }
+}, 1000)
